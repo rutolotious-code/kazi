@@ -9,9 +9,9 @@ import { useBranding } from '@/hooks/use-branding'
 
 export function Branding() {
   const branding = useBranding()
-  const [uploading, setUploading] = useState<'logoUrl' | 'heroBgUrl' | null>(null)
+  const [uploading, setUploading] = useState<'logoUrl' | 'heroBgUrl' | 'aboutImageUrl' | null>(null)
   const [message, setMessage] = useState<string | null>(null)
-  const upload = async (field: 'logoUrl' | 'heroBgUrl', file?: File) => {
+  const upload = async (field: 'logoUrl' | 'heroBgUrl' | 'aboutImageUrl', file?: File) => {
     if (!file) return
     if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type) || file.size > 5 * 1024 * 1024) {
       setMessage('Choose a PNG, JPG or WebP image under 5 MB.')
@@ -30,7 +30,7 @@ export function Branding() {
       setUploading(null)
     }
   }
-  const reset = async (field: 'logoUrl' | 'heroBgUrl') => {
+  const reset = async (field: 'logoUrl' | 'heroBgUrl' | 'aboutImageUrl') => {
     try {
       await setDoc(doc(db, 'siteSettings', 'branding'), { [field]: deleteField(), updatedAt: serverTimestamp() }, { merge: true })
       setMessage('Default image restored.')
@@ -43,13 +43,14 @@ export function Branding() {
     {message && <p className="form-message">{message}</p>}
     <BrandCard title="Logo" image={branding.logoUrl} field="logoUrl" uploading={uploading === 'logoUrl'} onUpload={upload} onReset={reset} />
     <BrandCard title="Home background image" image={branding.heroBgUrl} field="heroBgUrl" uploading={uploading === 'heroBgUrl'} onUpload={upload} onReset={reset} />
+    <BrandCard title="About section image" image={branding.aboutImageUrl} field="aboutImageUrl" uploading={uploading === 'aboutImageUrl'} onUpload={upload} onReset={reset} />
   </div>
 }
 
-function BrandCard({ title, image, field, uploading, onUpload, onReset }: { title: string; image: string; field: 'logoUrl' | 'heroBgUrl'; uploading: boolean; onUpload: (field: 'logoUrl' | 'heroBgUrl', file?: File) => void; onReset: (field: 'logoUrl' | 'heroBgUrl') => void }) {
+function BrandCard({ title, image, field, uploading, onUpload, onReset }: { title: string; image?: string; field: 'logoUrl' | 'heroBgUrl' | 'aboutImageUrl'; uploading: boolean; onUpload: (field: 'logoUrl' | 'heroBgUrl' | 'aboutImageUrl', file?: File) => void; onReset: (field: 'logoUrl' | 'heroBgUrl' | 'aboutImageUrl') => void }) {
   return <article className="admin-card">
     <div><span className="eyebrow">BRANDING</span><h2>{title}</h2></div>
-    <Image className="branding-preview" src={image} alt={`${title} preview`} width={field === 'logoUrl' ? 180 : 480} height={field === 'logoUrl' ? 120 : 220} unoptimized />
+    {image ? <Image className="branding-preview" src={image} alt={`${title} preview`} width={field === 'logoUrl' ? 180 : 480} height={field === 'logoUrl' ? 120 : 220} unoptimized /> : <div className="branding-preview olive-placeholder" aria-label="No image selected" />}
     <div className="admin-actions"><label className="button dark">{uploading ? 'Uploading…' : 'Choose image'}<input type="file" accept="image/png,image/jpeg,image/webp" hidden disabled={uploading} onChange={(event) => onUpload(field, event.target.files?.[0])} /></label><button className="button outline" type="button" onClick={() => onReset(field)}>Reset to default</button></div>
   </article>
 }

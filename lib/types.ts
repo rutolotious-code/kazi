@@ -23,4 +23,4 @@ export type Listing = {
   approvedBy?: string
 }
 
-export type Branding = { logoUrl?: string; heroBgUrl?: string }
+export type Branding = { logoUrl?: string; heroBgUrl?: string; aboutImageUrl?: string }

@@ -5,15 +5,14 @@ import { useEffect, useState } from 'react'
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { ArrowRight, Award, BarChart3, BriefcaseBusiness, Building2, Compass, Factory, Home, LineChart, Mail, MapPin, MessageCircle, Phone, ShieldCheck, Sparkles, Target, TrendingUp, Users } from 'lucide-react'
 import { db } from '@/lib/firebase'
-import { useApprovedListings } from '@/hooks/use-approved-listings'
 import { useBranding } from '@/hooks/use-branding'
+import { useApprovedListings } from '@/hooks/use-approved-listings'
 import { ListingCard } from './listing-card'
 import { Reveal, PageHero, services } from './site'
 
 export function HomePage() {
-  const { heroBgUrl } = useBranding()
+  const { heroBgUrl, aboutImageUrl } = useBranding()
   const { listings, loading, error } = useApprovedListings()
-  const newestListing = listings[0]
 
   return (
     <>
@@ -38,7 +37,7 @@ export function HomePage() {
         <ServiceCards linkLabel="Learn more" />
       </Reveal>
       <section className="section split">
-        <div className={`split-image ${newestListing?.coverImage ? 'listing-cover' : 'olive-placeholder'}`} style={newestListing?.coverImage ? { backgroundImage: `url(${newestListing.coverImage})` } : undefined} aria-label={newestListing ? `Newest approved listing: ${newestListing.title}` : undefined} />
+        {aboutImageUrl ? <div className="split-image about-image" style={{ backgroundImage: `url(${aboutImageUrl})` }} aria-label="NQ Kazi Investments about" /> : <div className="split-image olive-placeholder" aria-label="Olive gradient" />}
         <div>
           <span className="eyebrow">ABOUT NQ KAZI</span>
           <h2>South African property, handled with precision.</h2>
@@ -77,7 +76,8 @@ function ServiceCards({ linkLabel }: { linkLabel: string }) {
 }
 
 export function AboutPage() {
-  return <><PageHero eyebrow="ABOUT US" title="A national real estate firm built around you." text="NQ Kazi Investments serves clients across South Africa with residential, commercial and industrial property expertise — anchored by an investor mindset." /><section className="section split"><div className="split-image olive-placeholder" /><div><span className="eyebrow">OUR STORY</span><h2>Property is more than a transaction.</h2><p>We started NQ Kazi Investments because South Africans deserve a real estate partner who speaks their language — one that treats first-time buyers with the same seriousness as seasoned investors. Today we operate nationally, advising families and businesses on residential, commercial and industrial property opportunities.</p><p className="muted">Every relationship begins with listening, and every recommendation is grounded in market data, long-term thinking and genuine care for our clients&apos; outcomes.</p></div></section><section className="section off-white"><div className="section-heading"><span className="eyebrow">WHAT WE STAND FOR</span><h2>Our values</h2></div><div className="cards values-grid">{[[Award, 'Excellence', 'We hold every transaction to the highest professional standard.'], [Target, 'Integrity', 'Transparent advice, honest deals, no shortcuts.'], [Users, 'Client first', 'Tailored service for families, investors and SMMEs alike.'], [TrendingUp, 'Growth', 'We help our clients build wealth through property.']].map(([Icon, title, text]) => <article className="card" key={title as string}><div className="value-icon"><Icon /></div><h3>{title as string}</h3><p>{text as string}</p></article>)}</div></section><CtaSection /></>
+  const { aboutImageUrl } = useBranding()
+  return <><PageHero eyebrow="ABOUT US" title="A national real estate firm built around you." text="NQ Kazi Investments serves clients across South Africa with residential, commercial and industrial property expertise — anchored by an investor mindset." /><section className="section split">{aboutImageUrl ? <div className="split-image about-image" style={{ backgroundImage: `url(${aboutImageUrl})` }} aria-label="NQ Kazi Investments about" /> : <div className="split-image olive-placeholder" aria-label="Olive gradient" />}<div><span className="eyebrow">OUR STORY</span><h2>Property is more than a transaction.</h2><p>We started NQ Kazi Investments because South Africans deserve a real estate partner who speaks their language — one that treats first-time buyers with the same seriousness as seasoned investors. Today we operate nationally, advising families and businesses on residential, commercial and industrial property opportunities.</p><p className="muted">Every relationship begins with listening, and every recommendation is grounded in market data, long-term thinking and genuine care for our clients&apos; outcomes.</p></div></section><section className="section off-white"><div className="section-heading"><span className="eyebrow">WHAT WE STAND FOR</span><h2>Our values</h2></div><div className="cards values-grid">{[[Award, 'Excellence', 'We hold every transaction to the highest professional standard.'], [Target, 'Integrity', 'Transparent advice, honest deals, no shortcuts.'], [Users, 'Client first', 'Tailored service for families, investors and SMMEs alike.'], [TrendingUp, 'Growth', 'We help our clients build wealth through property.']].map(([Icon, title, text]) => <article className="card" key={title as string}><div className="value-icon"><Icon /></div><h3>{title as string}</h3><p>{text as string}</p></article>)}</div></section><CtaSection /></>
 }
 
 export function ServicesPage() {
