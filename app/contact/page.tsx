@@ -1,5 +1,8 @@
 import { Shell } from '@/components/site'
 import { EnquiryForm } from '@/components/public-pages'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = { title: 'Contact | NQ Kazi Investments', description: 'Talk to NQ Kazi Investments about your property goals.' }
 
 const details = [
   ['PHONE', '083 422 4505', 'tel:+27834224505'],

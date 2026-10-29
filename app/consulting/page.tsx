@@ -1,5 +1,8 @@
 import { Shell } from '@/components/site'
 import { EnquiryForm } from '@/components/public-pages'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = { title: 'Consulting | NQ Kazi Investments', description: 'Independent real estate consulting for serious buyers, families and SMMEs.' }
 import { BriefcaseBusiness, Compass, LineChart, ShieldCheck } from 'lucide-react'
 
 const services = [

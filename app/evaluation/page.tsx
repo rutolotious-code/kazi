@@ -1,5 +1,8 @@
 import { Shell } from '@/components/site'
 import { EnquiryForm } from '@/components/public-pages'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = { title: 'Property Evaluation | NQ Kazi Investments', description: 'Get a clear, market-backed valuation for your property.' }
 
 const included = [
   'Comparable market analysis (CMA)',
